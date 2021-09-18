@@ -1,0 +1,3 @@
+export const FETCH_DATA = 'user/FETCH_DATA';
+export const FETCH_DATA_SUCCESSFUL = 'user/FETCH_DATA_SUCCESSFUL';
+export const FETCH_DATA_FAILED = 'user/FETCH_DATA_FAILED';
