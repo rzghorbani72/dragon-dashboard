@@ -14,7 +14,8 @@ const api = {
   user: {
     list: () => `${baseUrl}${v1}/user/list`,
     filter: () => `${baseUrl}${v1}/user/search`,
-    update: () => `${baseUrl}${v1}/auth/update`
+    update: () => `${baseUrl}${v1}/auth/update`,
+    profile: () => `${baseUrl}${v1}/user/profile`
   },
   order: {
     submit: () => `${baseUrl}${v1}/order/create`
