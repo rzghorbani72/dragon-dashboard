@@ -1,0 +1,3 @@
+export const FETCH_PROFILE_DATA = 'profile/FETCH_DATA';
+export const FETCH_PROFILE_DATA_SUCCESSFUL = 'profile/FETCH_DATA_SUCCESSFUL';
+export const FETCH_PROFILE_DATA_FAILED = 'profile/FETCH_DATA_FAILED';

@@ -1,18 +1,18 @@
-import { takeLatest, put, call, fork, all, select } from 'redux-saga/effects';
+import { takeLatest, put, call, fork, all } from 'redux-saga/effects';
 import { isEmpty } from 'lodash';
 import request from 'src/utils/request';
 import api from 'src/config/api';
 import { fetchDataSuccessful, fetchDataFailed } from './actions';
 // import { openLoaderAction, closeLoaderAction } from '../loader/reducer';
 // import { handleOpenAction } from '../reducer';
-import { FETCH_DATA } from './types';
+import { FETCH_PROFILE_DATA } from './types';
 
-export function* fetchData({ payload }) {
-  const storeId = yield select((state) => state.selectedStore.id);
+export function* fetchProfileData() {
   try {
     // yield put(openLoaderAction());
     const res = yield call(request, 'get', api.user.profile());
-    if (!isEmpty(res)) {
+    debugger;
+    if (res.status === 200) {
       yield put(fetchDataSuccessful(res.data));
       //   yield put(closeLoaderAction());
     } else {
@@ -26,12 +26,12 @@ export function* fetchData({ payload }) {
   }
 }
 
-export function* fetchDataSaga() {
-  yield takeLatest(FETCH_DATA, fetchData);
+export function* fetchProfileDataSaga() {
+  yield takeLatest(FETCH_PROFILE_DATA, fetchProfileData);
 }
 
 export function* root() {
-  yield all([fork(fetchDataSaga)]);
+  yield all([fork(fetchProfileDataSaga)]);
 }
 
 export default root;

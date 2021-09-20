@@ -1,4 +1,4 @@
-const baseUrl = 'localhost:8080';
+const baseUrl = 'http://localhost:8080';
 const v1 = '/v1';
 const api = {
   auth: {

@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -16,27 +17,42 @@ import {
   FormControlLabel
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-
+import api from 'src/config/api';
+import request from 'src/utils/request';
+import { useDispatch } from 'react-redux';
+import { fetchProfileData } from 'src/stores/profile/actions';
 // ----------------------------------------------------------------------
+const phoneRegex = /^[\+]?[(]?[0-9]{2}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+    phoneNumber: Yup.string()
+      .matches(phoneRegex, 'Phone number is not valid')
+      .required('Phone number is required'),
     password: Yup.string().required('Password is required')
   });
 
   const formik = useFormik({
     initialValues: {
-      email: '',
+      phoneNumber: '',
       password: '',
       remember: true
     },
     validationSchema: LoginSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: async ({ phoneNumber, password }) => {
+      const loginResult = await request('post', api.auth.login(), {
+        phone_number: phoneNumber,
+        password
+      });
+      debugger;
+      if (loginResult.status_name === 'success') {
+        dispatch(fetchProfileData());
+        navigate('/dashboard', { replace: true });
+      }
     }
   });
 
@@ -53,11 +69,12 @@ export default function LoginForm() {
           <TextField
             fullWidth
             autoComplete="username"
-            type="email"
-            label="Email address"
-            {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
+            placeholder="ex: 9123334455"
+            type="phone"
+            label="Phone Number"
+            {...getFieldProps('phoneNumber')}
+            error={Boolean(touched.phoneNumber && errors.phoneNumber)}
+            helperText={touched.phoneNumber && errors.phoneNumber}
           />
 
           <TextField

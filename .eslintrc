@@ -4,17 +4,20 @@
     "browser": true,
     "node": true
   },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx"]
+      }
+    }
+  },
   "extends": [
     "airbnb",
     "prettier",
     "plugin:jsx-a11y/recommended",
     "plugin:react-hooks/recommended"
   ],
-  "plugins": [
-    "prettier",
-    "react",
-    "react-hooks"
-  ],
+  "plugins": ["prettier", "react", "react-hooks"],
   "parser": "@babel/eslint-parser",
   "parserOptions": {
     "ecmaVersion": 8,
@@ -49,18 +52,36 @@
     "react/require-default-props": 0,
     "react/no-unescaped-entities": 0,
     "import/prefer-default-export": 0,
+    "import/no-unresolved": 0,
     "react/jsx-props-no-spreading": 0,
     "react/jsx-filename-extension": 0,
     "react/destructuring-assignment": 0,
     "import/no-extraneous-dependencies": 0,
+    "no-debugger": 0,
     "react/jsx-key": 1,
     "react-hooks/rules-of-hooks": 2,
+    "spaced-comment": [
+      "error",
+      "always",
+      {
+        "line": {
+          "markers": ["/"],
+          "exceptions": ["-", "+"]
+        },
+        "block": {
+          "markers": ["!"],
+          "exceptions": ["*"],
+          "balanced": true
+        }
+      }
+    ],
     "no-unused-vars": [
       1,
       {
         "ignoreRestSiblings": false
       }
     ],
+
     "prettier/prettier": [
       2,
       {
