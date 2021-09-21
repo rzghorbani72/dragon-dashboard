@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { isEmpty } from 'lodash';
+import { useHistory } from 'react-router-dom';
 
 axios.interceptors.request.use(
   async (config) => config,
@@ -9,15 +10,15 @@ axios.interceptors.request.use(
 );
 
 axios.interceptors.response.use(
-  (response) =>
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    response,
-  async (error) =>
-    // if (error.response?.status === 401) {
-    // }
-
-    Promise.reject(error)
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      window.location.assign('/login');
+    }
+    return Promise.reject(error);
+  }
 );
+
 axios.defaults.withCredentials = true;
 
 async function request(method = 'get', url, bodyData = {}) {

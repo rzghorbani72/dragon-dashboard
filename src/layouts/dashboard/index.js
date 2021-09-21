@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { fetchProfileData } from 'src/stores/profile/actions';
+
 // material
 import { styled } from '@mui/material/styles';
 //
@@ -34,6 +37,11 @@ const MainStyle = styled('div')(({ theme }) => ({
 
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProfileData());
+  }, []);
 
   return (
     <RootStyle>

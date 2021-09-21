@@ -11,7 +11,6 @@ export function* fetchProfileData() {
   try {
     // yield put(openLoaderAction());
     const res = yield call(request, 'get', api.user.profile());
-    debugger;
     if (res.status === 200) {
       yield put(fetchDataSuccessful(res.data));
       //   yield put(closeLoaderAction());

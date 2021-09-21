@@ -1,9 +1,15 @@
+/* eslint-disable camelcase */
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
+
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { fetchUsersData } from 'src/stores/users/actions';
+import { useDispatch, useSelector } from 'react-redux';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
+import isArray from 'lodash/isArray';
+import isEmpty from 'lodash/isEmpty';
 // material
 import {
   Card,
@@ -32,11 +38,11 @@ import USERLIST from '../_mocks_/user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
+  { id: 'id', label: 'id', alignRight: false },
+  { id: 'fullName', label: 'full name', alignRight: false },
+  { id: 'phoneNumber', label: 'phone number', alignRight: false },
   { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'createdAt', label: 'created at', alignRight: false },
   { id: '' }
 ];
 
@@ -78,6 +84,11 @@ export default function User() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.users.data);
+  useEffect(() => {
+    dispatch(fetchUsersData());
+  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -168,11 +179,12 @@ export default function User() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => {
-                      const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                  {!isEmpty(users) &&
+                    isArray(users) &&
+                    users.map((row) => {
+                      debugger;
+                      const { id, full_name, role, phone_number, createdAt } = row;
+                      const isItemSelected = selected.indexOf(full_name) !== -1;
 
                       return (
                         <TableRow
@@ -186,28 +198,34 @@ export default function User() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
+                              onChange={(event) => handleClick(event, full_name)}
                             />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={avatarUrl} />
                               <Typography variant="subtitle2" noWrap>
-                                {name}
+                                {id}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{company}</TableCell>
-                          <TableCell align="left">{role}</TableCell>
-                          <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                          <TableCell component="th" scope="row" padding="none">
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              {/* <Avatar alt={full_name} src={avatarUrl} /> */}
+                              <Typography variant="subtitle2" noWrap>
+                                {full_name}
+                              </Typography>
+                            </Stack>
+                          </TableCell>
+                          <TableCell align="left">{phone_number}</TableCell>
                           <TableCell align="left">
                             <Label
                               variant="ghost"
-                              color={(status === 'banned' && 'error') || 'success'}
+                              color={(role === 'banned' && 'error') || 'success'}
                             >
-                              {sentenceCase(status)}
+                              {sentenceCase(role)}
                             </Label>
                           </TableCell>
+                          <TableCell align="left">{createdAt}</TableCell>
 
                           <TableCell align="right">
                             <UserMoreMenu />

@@ -48,7 +48,6 @@ export default function LoginForm() {
         phone_number: phoneNumber,
         password
       });
-      debugger;
       if (loginResult.status_name === 'success') {
         dispatch(fetchProfileData());
         navigate('/dashboard', { replace: true });
