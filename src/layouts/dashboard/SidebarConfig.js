@@ -19,34 +19,24 @@ const sidebarConfig = [
   },
   {
     title: 'user',
-    path: '/dashboard/user',
+    path: '/dashboard/users',
     icon: getIcon(peopleFill)
+  },
+  {
+    title: 'categories',
+    path: '/dashboard/categories',
+    icon: getIcon(fileTextFill)
   },
   {
     title: 'courses',
     path: '/dashboard/courses',
     icon: getIcon(shoppingBagFill)
+  },
+  {
+    title: 'orders',
+    path: '/dashboard/orders',
+    icon: getIcon(fileTextFill)
   }
-  // {
-  //   title: 'blog',
-  //   path: '/dashboard/blog',
-  //   icon: getIcon(fileTextFill)
-  // },
-  // {
-  //   title: 'login',
-  //   path: '/login',
-  //   icon: getIcon(lockFill)
-  // },
-  // {
-  //   title: 'register',
-  //   path: '/register',
-  //   icon: getIcon(personAddFill)
-  // },
-  // {
-  //   title: 'Not found',
-  //   path: '/404',
-  //   icon: getIcon(alertTriangleFill)
-  // }
 ];
 
 export default sidebarConfig;
