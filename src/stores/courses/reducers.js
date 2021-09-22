@@ -1,24 +1,26 @@
-import { FETCH_DATA, FETCH_DATA_FAILED, FETCH_DATA_SUCCESSFUL } from './types';
+import { FETCH_COURSE_DATA, FETCH_COURSE_DATA_FAILED, FETCH_COURSE_DATA_SUCCESSFUL } from './types';
 
 const initial = {
-  data: {},
+  data: [],
+  count: 0,
   fetch_status: ''
 };
 
 const reducer = (state = initial, action) => {
   switch (action.type) {
-    case FETCH_DATA:
+    case FETCH_COURSE_DATA:
       return {
         ...state,
         fetch_status: 'loading'
       };
-    case FETCH_DATA_SUCCESSFUL:
+    case FETCH_COURSE_DATA_SUCCESSFUL:
       return {
         ...state,
-        data: action.payload,
+        count: action.payload.details.count,
+        data: action.payload.details.rows,
         fetch_status: 'successful'
       };
-    case FETCH_DATA_FAILED:
+    case FETCH_COURSE_DATA_FAILED:
       return {
         ...state,
         fetch_status: 'failed'

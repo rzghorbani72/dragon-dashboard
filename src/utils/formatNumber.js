@@ -1,10 +1,11 @@
+/* eslint-disable prefer-template */
 import { replace } from 'lodash';
 import numeral from 'numeral';
 
 // ----------------------------------------------------------------------
 
 export function fCurrency(number) {
-  return numeral(number).format(Number.isInteger(number) ? '$0,0' : '$0,0.00');
+  return Number.isInteger(number) && number.toLocaleString() + ' T';
 }
 
 export function fPercent(number) {

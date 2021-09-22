@@ -1,22 +1,30 @@
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchCourseData } from 'src/stores/courses/actions';
+import { isEmpty, isArray } from 'lodash';
 // material
 import { Container, Stack, Typography } from '@mui/material';
 // components
 import Page from '../components/Page';
 import {
   ProductSort,
-  ProductList,
+  CoursesList,
   ProductCartWidget,
   ProductFilterSidebar
-} from '../components/_dashboard/products';
+} from '../components/_dashboard/courses';
 //
-import PRODUCTS from '../_mocks_/products';
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceShop() {
+export default function CoursesPage() {
+  const dispatch = useDispatch();
   const [openFilter, setOpenFilter] = useState(false);
+  const courses = useSelector((state) => state.courses.data);
+
+  useEffect(() => {
+    dispatch(fetchCourseData());
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -71,8 +79,8 @@ export default function EcommerceShop() {
             <ProductSort />
           </Stack>
         </Stack>
+        {!isEmpty(courses) && isArray(courses) && <CoursesList courses={courses} />}
 
-        <ProductList products={PRODUCTS} />
         <ProductCartWidget />
       </Container>
     </Page>
