@@ -1,16 +1,14 @@
 /* eslint-disable camelcase */
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
-import { mockImgCover } from 'src/utils/mockImages';
-
+import api from 'src/config/api';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { isEmpty } from 'lodash';
 // material
 import { Box, Card, Link, Typography, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // utils
 import { fCurrency } from '../../../utils/formatNumber';
 //
-import Label from '../../Label';
-import ColorPreview from '../../ColorPreview';
 
 // ----------------------------------------------------------------------
 
@@ -29,12 +27,16 @@ CourseCard.propTypes = {
 };
 
 export default function CourseCard({ course }) {
-  const { id, title, primary_price, price } = course;
-
+  const { id, title, primary_price, price, files } = course;
+  const navigate = useNavigate();
   return (
-    <Card>
+    <Card onClick={() => navigate(`/dashboard/courses/${id}`)} style={{ cursor: 'pointer' }}>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        <CourseImgStyle alt={title} src={mockImgCover(id)} />
+        {isEmpty(files) ? (
+          <CourseImgStyle alt={title} src={api.image.getOne('111')} />
+        ) : (
+          <CourseImgStyle alt={title} src={api.image.getOne(files[0].uid)} />
+        )}
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>

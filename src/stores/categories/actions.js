@@ -1,13 +1,17 @@
-import { FETCH_DATA, FETCH_DATA_FAILED, FETCH_DATA_SUCCESSFUL } from './types';
+import {
+  FETCH_CATEGORY_DATA,
+  FETCH_CATEGORY_DATA_FAILED,
+  FETCH_CATEGORY_DATA_SUCCESSFUL
+} from './types';
 
-export const fetchData = (payload) => ({
-  type: FETCH_DATA,
+export const fetchCategoriesData = (payload) => ({
+  type: FETCH_CATEGORY_DATA,
   payload
 });
-export const fetchDataSuccessful = (payload) => ({
-  type: FETCH_DATA_SUCCESSFUL,
+export const fetchCategoriesDataSuccessful = (payload) => ({
+  type: FETCH_CATEGORY_DATA_SUCCESSFUL,
   payload
 });
-export const fetchDataFailed = () => ({
-  type: FETCH_DATA_FAILED
+export const fetchCategoriesDataFailed = () => ({
+  type: FETCH_CATEGORY_DATA_FAILED
 });
