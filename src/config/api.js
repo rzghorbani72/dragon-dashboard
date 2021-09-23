@@ -45,7 +45,8 @@ const api = {
     upload: () => `${baseUrl}${v1}/file/upload/image`,
     list: () => `${baseUrl}${v1}/file/list?type=image`,
     update: (uid) => `${baseUrl}${v1}/file/update/${uid}`,
-    getOne: (uid) => `${baseUrl}${v1}/file/image/${uid}`
+    getOne: (uid) => `${baseUrl}${v1}/file/image/${uid}`,
+    deleteOne: (uid) => `${baseUrl}${v1}/file/remove/${uid}`
   },
   discount: {
     checkCode: (code) => `${baseUrl}${v1}/discount/check/${code}`,

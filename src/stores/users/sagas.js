@@ -1,28 +1,26 @@
 import { takeLatest, put, call, fork, all, select } from 'redux-saga/effects';
-import { isEmpty } from 'lodash';
 import request from 'src/utils/request';
 import api from 'src/config/api';
 import { fetchUsersDataSuccessful, fetchUsersDataFailed } from './actions';
-// import { openLoaderAction, closeLoaderAction } from '../loader/reducer';
-// import { handleOpenAction } from '../reducer';
+import { openLoaderAction, closeLoaderAction } from '../loader/reducer';
+import { openSnackBar } from '../snackbar/reducer';
 import { FETCH_DATA } from './types';
 
-export function* fetchData({ payload }) {
+export function* fetchData() {
   try {
-    // yield put(openLoaderAction());
+    yield put(openLoaderAction());
     const res = yield call(request, 'get', api.user.list());
-    debugger;
+    yield put(closeLoaderAction());
     if (res.status === 200) {
       yield put(fetchUsersDataSuccessful(res.data.details));
-      //   yield put(closeLoaderAction());
     } else {
       yield put(fetchUsersDataFailed());
-      //   yield put(closeLoaderAction());
+      yield put(openSnackBar(res.response.data.message || res.response.data.name, 'error'));
     }
   } catch (error) {
     console.log(error);
     yield put(fetchUsersDataFailed());
-    // yield put(closeLoaderAction());
+    yield put(closeLoaderAction());
   }
 }
 

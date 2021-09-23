@@ -21,11 +21,16 @@ axios.interceptors.response.use(
 
 axios.defaults.withCredentials = true;
 
-async function request(method = 'get', url, bodyData = {}) {
+async function request(
+  method = 'get',
+  url,
+  bodyData = {},
+  headers = { 'Content-Type': 'application/json' }
+) {
   switch (method) {
     case 'get':
       return axios
-        .get(url)
+        .get(url, headers)
         .then((response) => ({
           ...response,
           status_name: 'success'
@@ -38,7 +43,8 @@ async function request(method = 'get', url, bodyData = {}) {
       return axios({
         method: 'POST',
         url,
-        data: bodyData
+        data: bodyData,
+        headers
       })
         .then((response) => ({
           ...response,
@@ -52,6 +58,7 @@ async function request(method = 'get', url, bodyData = {}) {
       return axios({
         method: 'PUT',
         url,
+        headers,
         data: isEmpty(bodyData) ? {} : bodyData
       })
         .then((response) => ({
@@ -66,6 +73,7 @@ async function request(method = 'get', url, bodyData = {}) {
       return axios({
         method: 'PATCH',
         url,
+        headers,
         data: bodyData
       })
         .then((response) => ({
@@ -80,6 +88,7 @@ async function request(method = 'get', url, bodyData = {}) {
       return axios({
         method: 'DELETE',
         url,
+        headers,
         data: bodyData
       })
         .then((response) => ({

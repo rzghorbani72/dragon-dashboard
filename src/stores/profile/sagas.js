@@ -4,7 +4,7 @@ import request from 'src/utils/request';
 import api from 'src/config/api';
 import { fetchDataSuccessful, fetchDataFailed } from './actions';
 // import { openLoaderAction, closeLoaderAction } from '../loader/reducer';
-// import { handleOpenAction } from '../reducer';
+// import { openSnackBar } from '../reducer';
 import { FETCH_PROFILE_DATA } from './types';
 
 export function* fetchProfileData() {

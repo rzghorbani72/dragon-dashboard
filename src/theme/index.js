@@ -4,6 +4,9 @@ import { useMemo } from 'react';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles';
 //
+import SnackBar from 'src/components/snackbar/snackbar';
+import Loader from 'src/components/loader/loader';
+
 import shape from './shape';
 import palette from './palette';
 import typography from './typography';
@@ -33,6 +36,8 @@ export default function ThemeConfig({ children }) {
 
   return (
     <StyledEngineProvider injectFirst>
+      <SnackBar />
+      <Loader />
       <ThemeProvider theme={theme}>
         <CssBaseline />
         {children}

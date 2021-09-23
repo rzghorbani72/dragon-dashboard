@@ -1,6 +1,6 @@
 import faker from 'faker';
 // utils
-import { mockImgCover } from '../utils/mockImages';
+import { mockImgCover } from 'src/utils/mockImages';
 
 // ----------------------------------------------------------------------
 

@@ -8,8 +8,8 @@ import messageCircleFill from '@iconify/icons-eva/message-circle-fill';
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Link, Card, Grid, Avatar, Typography, CardContent } from '@mui/material';
 // utils
-import { fDate } from '../../../utils/formatTime';
-import { fShortenNumber } from '../../../utils/formatNumber';
+import { fDate } from 'src/utils/formatTime';
+import { fShortenNumber } from 'src/utils/formatNumber';
 //
 import SvgIconStyle from '../../SvgIconStyle';
 

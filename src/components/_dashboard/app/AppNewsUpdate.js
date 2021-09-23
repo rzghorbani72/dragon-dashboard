@@ -7,7 +7,7 @@ import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill';
 // material
 import { Box, Stack, Link, Card, Button, Divider, Typography, CardHeader } from '@mui/material';
 // utils
-import { mockImgCover } from '../../../utils/mockImages';
+import { mockImgCover } from 'src/utils/mockImages';
 //
 import Scrollbar from '../../Scrollbar';
 

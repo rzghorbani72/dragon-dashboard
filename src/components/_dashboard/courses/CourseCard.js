@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash';
 import { Box, Card, Link, Typography, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // utils
-import { fCurrency } from '../../../utils/formatNumber';
+import { fCurrency } from 'src/utils/formatNumber';
 //
 
 // ----------------------------------------------------------------------

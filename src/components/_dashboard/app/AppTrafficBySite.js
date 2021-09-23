@@ -8,7 +8,7 @@ import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 // material
 import { Box, Grid, Card, Paper, Typography, CardHeader, CardContent } from '@mui/material';
 // utils
-import { fShortenNumber } from '../../../utils/formatNumber';
+import { fShortenNumber } from 'src/utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
