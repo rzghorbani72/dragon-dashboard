@@ -5,6 +5,7 @@ export const IMG_SIZE_MSG = 'حجم این عکس باید کمتر از 2MB ب�
 // SERVER DATE FORMAT
 export const SERVER_DATE_FORMAT = 'YYYY-MM-DD';
 export const CLIENT_DATE_FORMAT = 'jYYYY/jM/jD';
+export const COMPLETE_DATE_FORMAT = 'jYYYY-jMM-jDD HH:mm';
 
 // GRID SPACING
 export const GRID_SPACING = 4;

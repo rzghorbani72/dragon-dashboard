@@ -6,8 +6,7 @@ import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import { fetchUsersData } from 'src/stores/users/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import plusFill from '@iconify/icons-eva/plus-fill';
-import { Link as RouterLink } from 'react-router-dom';
+import { formatDate } from 'src/utils/helpers';
 import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
 // material
@@ -140,14 +139,6 @@ export default function User() {
           <Typography variant="h4" gutterBottom>
             User
           </Typography>
-          <Button
-            variant="contained"
-            component={RouterLink}
-            to="#"
-            startIcon={<Icon icon={plusFill} />}
-          >
-            New User
-          </Button>
         </Stack>
 
         <Card>
@@ -196,16 +187,11 @@ export default function User() {
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              {/* <Avatar alt={full_name} src={avatarUrl} /> */}
-                              <Typography variant="subtitle2" noWrap>
-                                {full_name}
-                              </Typography>
-                            </Stack>
+                          <TableCell align="center" component="th" scope="row" padding="none">
+                            {full_name}
                           </TableCell>
-                          <TableCell align="left">{phone_number}</TableCell>
-                          <TableCell align="left">
+                          <TableCell align="center">{phone_number}</TableCell>
+                          <TableCell align="center">
                             <Label
                               variant="ghost"
                               color={(role === 'banned' && 'error') || 'success'}
@@ -213,7 +199,7 @@ export default function User() {
                               {sentenceCase(role)}
                             </Label>
                           </TableCell>
-                          <TableCell align="left">{createdAt}</TableCell>
+                          <TableCell align="center">{formatDate(createdAt)}</TableCell>
 
                           <TableCell align="right">
                             <UserMoreMenu />

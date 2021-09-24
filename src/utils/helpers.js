@@ -7,6 +7,7 @@ import moment from 'moment-jalaali';
 import {
   SERVER_DATE_FORMAT,
   CLIENT_DATE_FORMAT,
+  COMPLETE_DATE_FORMAT,
   IMAGE_EXTs,
   IMAGE_SIZE,
   IMG_SIZE_MSG
@@ -159,13 +160,12 @@ export const formatNumber = (n, acceptNegative = false) => {
 
   return Number(n).toLocaleString();
 };
-
 /**
  * receives string date and returs a specified hijri format of that date
  * @param {String} str
  */
 export const formatDate = (str = '') => {
-  if (moment(str).isValid()) return moment(str).format(CLIENT_DATE_FORMAT);
+  if (moment(str).isValid()) return moment(str).format(COMPLETE_DATE_FORMAT);
 
   return str;
 };
