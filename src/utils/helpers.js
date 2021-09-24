@@ -29,6 +29,11 @@ export const fixNumbers = (str) => {
   }
   return str;
 };
+export const errorParserMessage = (res) => {
+  const msg =
+    res.response?.data?.message?.message || res.response?.data?.message || res.response.data.name;
+  return msg;
+};
 export function isInt(n) {
   return Number(n) === n && n % 1 === 0;
 }

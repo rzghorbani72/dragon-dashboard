@@ -35,13 +35,16 @@ function readFile(file) {
 function ImageDrop({ size = 250, image = null, setImage, openSnackBar }) {
   const classes = useStyles({ size });
 
-  // const [upImg, setImage] = useState(image);
+  const [upImage, setUpImage] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [rotation, setRotation] = useState(0);
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [croppedImage, setCroppedImage] = useState(image || null);
 
+  useEffect(() => {
+    if (image === null) setUpImage(null);
+  }, [image]);
   // Dropzone functions
   const onDrop = useCallback((files) => {
     const file = files[0];
@@ -50,8 +53,8 @@ function ImageDrop({ size = 250, image = null, setImage, openSnackBar }) {
 
     reader.onload = (event) => {
       const { result } = event.target;
-      if (isBase64(result, { allowMime: true }) && image !== result) {
-        setImage(result);
+      if (isBase64(result, { allowMime: true }) && upImage !== result) {
+        setUpImage(result);
       }
     };
     reader.readAsDataURL(file);
@@ -68,7 +71,7 @@ function ImageDrop({ size = 250, image = null, setImage, openSnackBar }) {
       if (validationMsg) return openSnackBar(validationMsg, 'info');
 
       const imageDataUrl = await readFile(file);
-      setImage(imageDataUrl);
+      setUpImage(imageDataUrl);
     }
   };
 
@@ -78,7 +81,7 @@ function ImageDrop({ size = 250, image = null, setImage, openSnackBar }) {
 
   const showCroppedImage = useCallback(async () => {
     try {
-      const croppedImage = await getCroppedImg(image, croppedAreaPixels, rotation);
+      const croppedImage = await getCroppedImg(upImage, croppedAreaPixels, rotation);
 
       setCroppedImage(croppedImage.link);
       setImage(croppedImage.blob);
@@ -95,7 +98,7 @@ function ImageDrop({ size = 250, image = null, setImage, openSnackBar }) {
   return (
     <div className={classes.cropperRoot}>
       <div className={classes.dropWrapper}>
-        {!image && (
+        {!upImage && (
           <div
             className={classes.dropBox}
             {...getRootProps()}
@@ -134,7 +137,7 @@ function ImageDrop({ size = 250, image = null, setImage, openSnackBar }) {
         )}
       </div>
 
-      {image && (
+      {upImage && (
         <div className={classes.root}>
           <div className={classes.dropBox}>
             {croppedImage && <img src={croppedImage} alt="Cropped" className={classes.img} />}
@@ -142,10 +145,10 @@ function ImageDrop({ size = 250, image = null, setImage, openSnackBar }) {
               <CloseIcon />
             </IconButton>
           </div>
-          {!!image && (
+          {upImage && (
             <div className={classes.cropContainer}>
               <Cropper
-                image={image}
+                image={upImage}
                 crop={crop}
                 rotation={rotation}
                 zoom={zoom}
@@ -161,7 +164,7 @@ function ImageDrop({ size = 250, image = null, setImage, openSnackBar }) {
       )}
 
       <Grid container spacing={1} justify="flex-end">
-        {!!image && (
+        {upImage && (
           <>
             <Grid item container wrap="nowrap" spacing={2} alignItems="center">
               <Grid item>

@@ -1,27 +1,24 @@
 import { takeLatest, put, call, fork, all } from 'redux-saga/effects';
-import { isEmpty } from 'lodash';
 import request from 'src/utils/request';
 import api from 'src/config/api';
 import { fetchDataSuccessful, fetchDataFailed } from './actions';
-// import { openLoaderAction, closeLoaderAction } from '../loader/reducer';
-// import { openSnackBar } from '../reducer';
+import { openLoaderAction, closeLoaderAction } from '../loader/reducer';
 import { FETCH_PROFILE_DATA } from './types';
 
 export function* fetchProfileData() {
   try {
-    // yield put(openLoaderAction());
+    yield put(openLoaderAction());
     const res = yield call(request, 'get', api.user.profile());
+    yield put(closeLoaderAction());
     if (res.status === 200) {
       yield put(fetchDataSuccessful(res.data));
-      //   yield put(closeLoaderAction());
     } else {
       yield put(fetchDataFailed());
-      //   yield put(closeLoaderAction());
     }
   } catch (error) {
     console.log(error);
     yield put(fetchDataFailed());
-    // yield put(closeLoaderAction());
+    yield put(closeLoaderAction());
   }
 }
 

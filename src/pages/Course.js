@@ -9,9 +9,6 @@ export default function Course() {
   return (
     <Page title="Dashboard: Course">
       <Container>
-        <Typography variant="h4" sx={{ mb: 5 }}>
-          Course :id
-        </Typography>
         <SingleCourse />
       </Container>
     </Page>

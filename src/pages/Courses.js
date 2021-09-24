@@ -5,6 +5,9 @@ import { fetchCourseData } from 'src/stores/courses/actions';
 import { isEmpty, isArray } from 'lodash';
 // material
 import { Container, Stack, Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+
 // components
 import Page from '../components/Page';
 import {
@@ -53,6 +56,7 @@ export default function CoursesPage() {
     handleSubmit();
     resetForm();
   };
+  const navigate = useNavigate();
 
   return (
     <Page title="Dashboard: Courses">
@@ -68,16 +72,13 @@ export default function CoursesPage() {
           justifyContent="flex-end"
           sx={{ mb: 5 }}
         >
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <ProductFilterSidebar
-              formik={formik}
-              isOpenFilter={openFilter}
-              onResetFilter={handleResetFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-            />
-            <ProductSort />
-          </Stack>
+          <Button
+            variant="contained"
+            onClick={() => navigate(`/dashboard/courses/new`)}
+            style={{ marginTop: 10, width: '100%' }}
+          >
+            new counrse
+          </Button>
         </Stack>
         {!isEmpty(courses) && isArray(courses) && <CoursesList courses={courses} />}
 

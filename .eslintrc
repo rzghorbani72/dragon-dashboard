@@ -60,6 +60,7 @@
     "import/no-extraneous-dependencies": 0,
     "no-debugger": 0,
     "react/jsx-key": 1,
+    "quotes": 0,
     "react-hooks/rules-of-hooks": 2,
     "spaced-comment": [
       "error",

@@ -5,15 +5,17 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ImageCropper from 'src/components/imageCrop/imageCropper';
 import { Container, Grid, Stack, Typography } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
-import { pink } from '@mui/material/colors';
+import { orange } from '@mui/material/colors';
 import Button from '@mui/material/Button';
 import api from 'src/config/api';
 import { useDispatch } from 'react-redux';
 import request from 'src/utils/request';
 import { openSnackBar } from 'src/stores/snackbar/reducer';
 import { openLoaderAction, closeLoaderAction } from 'src/stores/loader/reducer';
+import { errorParserMessage } from 'src/utils/helpers';
 
 export default function Images({ info, fetchCourse, selectedImage, setSelectedImage }) {
+  debugger;
   const [image, setImage] = useState(null);
   const [uploadedImage, setUploadImage] = useState(null);
   const dispatch = useDispatch();
@@ -21,14 +23,17 @@ export default function Images({ info, fetchCourse, selectedImage, setSelectedIm
   const uploadImage = async () => {
     if (image) {
       const bodyFormData = new FormData();
+      debugger;
       const cimage = new File([image], `courseImage_${new Date()}.jpeg`, {
         type: 'image/jpeg',
         lastModified: new Date(),
         size: 2
       });
+      debugger;
       bodyFormData.append('image', cimage);
+      debugger;
       bodyFormData.append('title', `${info.title}_image`);
-      if (info) bodyFormData.append('courseId', info?.id);
+      if (info?.id) bodyFormData.append('courseId', info?.id);
       dispatch(openLoaderAction());
       const uploadedImage = await request('post', api.image.upload(), bodyFormData, {
         'Content-Type': 'multipart/form-data'
@@ -39,15 +44,9 @@ export default function Images({ info, fetchCourse, selectedImage, setSelectedIm
         setUploadImage(uploadedImage.data.details);
         dispatch(openSnackBar('course image uploaded', 'success'));
       } else {
+        const message = errorParserMessage(uploadedImage);
         dispatch(closeLoaderAction());
-        dispatch(
-          openSnackBar(
-            uploadedImage.response.data.message
-              ? uploadedImage.response.data.message
-              : uploadedImage.response.data.name,
-            'error'
-          )
-        );
+        dispatch(openSnackBar(JSON.stringify(message), 'error'));
       }
     }
   };
@@ -73,10 +72,17 @@ export default function Images({ info, fetchCourse, selectedImage, setSelectedIm
   };
   return (
     <>
-      <Stack spacing={2} direction="row" justifyContent="center">
-        {!isEmpty(info?.files) &&
-          info?.files.map((item, key) => (
-            <Stack key={key} spacing={2} style={{ justifyContent: 'center', alignItems: 'center' }}>
+      <Grid container spacing={2} direction="row" justifyContent="center">
+        {!isEmpty(info.files) &&
+          info.files.map((item, key) => (
+            <Grid
+              item
+              lg={3}
+              xs={6}
+              key={key}
+              spacing={2}
+              style={{ justifyContent: 'center', alignItems: 'center' }}
+            >
               <img
                 src={api.image.getOne(item.uid)}
                 alt={info.title}
@@ -85,30 +91,38 @@ export default function Images({ info, fetchCourse, selectedImage, setSelectedIm
                 style={{ margin: 10 }}
               />
               <Grid container style={{ justifyContent: 'space-evenly', alignItems: 'center' }}>
-                <Button variant="outlined" onClick={() => selectImageAsCourseImage(item)}>
-                  {item?.uid} {selectedImage === item?.uid ? <CheckIcon /> : ''}
+                <Button
+                  variant="outlined"
+                  style={selectedImage === item.uid ? { color: orange[800] } : {}}
+                  onClick={() => selectImageAsCourseImage(item)}
+                >
+                  {item?.uid} {selectedImage === item.uid && <CheckIcon />}
                 </Button>
-                <DeleteForeverIcon
-                  sx={{ color: pink[500] }}
-                  fontSize="large"
-                  onClick={() => permanentlyDeleteImage(item)}
-                />
+                {selectedImage !== item.uid && (
+                  <DeleteForeverIcon
+                    sx={{ color: orange[500] }}
+                    fontSize="medium"
+                    onClick={() => permanentlyDeleteImage(item)}
+                  />
+                )}
               </Grid>
-            </Stack>
+            </Grid>
           ))}
-      </Stack>
+      </Grid>
       <Grid container justifyContent="center" style={{ marginTop: 30 }}>
         <Grid item>
           <Stack spacing={2} style={{ justifyContent: 'center', alignItems: 'center' }}>
             <ImageCropper size={290} image={image} setImage={setImage} />
           </Stack>
-          <Button
-            variant="contained"
-            onClick={uploadImage}
-            style={{ marginTop: 10, width: '100%' }}
-          >
-            Upload Image
-          </Button>
+          {image && (
+            <Button
+              variant="contained"
+              onClick={uploadImage}
+              style={{ marginTop: 10, width: '100%' }}
+            >
+              Upload Image
+            </Button>
+          )}
           <Button
             variant="outlined"
             onClick={resetImageCropper}
@@ -116,7 +130,7 @@ export default function Images({ info, fetchCourse, selectedImage, setSelectedIm
           >
             Reset Image
           </Button>
-          {uploadedImage && (
+          {uploadedImage && image && (
             <Button
               variant="outlined"
               style={{ marginTop: 10, width: '100%' }}

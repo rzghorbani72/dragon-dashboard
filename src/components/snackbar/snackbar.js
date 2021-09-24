@@ -9,7 +9,6 @@ import MuiAlert from '@mui/material/Alert';
 
 function SnackBar() {
   const snackbar = useSelector((state) => state.snackbar);
-  debugger;
   const dispatch = useDispatch();
   const handleClose = useCallback(() => dispatch(closeSnackBar()), []);
 
