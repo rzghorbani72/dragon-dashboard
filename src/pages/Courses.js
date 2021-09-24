@@ -7,6 +7,8 @@ import { isEmpty, isArray } from 'lodash';
 import { Container, Stack, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import plusFill from '@iconify/icons-eva/plus-fill';
+import { Icon } from '@iconify/react';
 
 // components
 import Page from '../components/Page';
@@ -61,28 +63,24 @@ export default function CoursesPage() {
   return (
     <Page title="Dashboard: Courses">
       <Container>
-        <Typography variant="h4" sx={{ mb: 5 }}>
-          Courses
-        </Typography>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+          <Typography variant="h4" sx={{ mb: 5 }}>
+            Courses
+          </Typography>
 
-        <Stack
-          direction="row"
-          flexWrap="wrap-reverse"
-          alignItems="center"
-          justifyContent="flex-end"
-          sx={{ mb: 5 }}
-        >
           <Button
             variant="contained"
-            onClick={() => navigate(`/dashboard/courses/new`)}
-            style={{ marginTop: 10, width: '100%' }}
+            component={RouterLink}
+            to="#"
+            startIcon={<Icon icon={plusFill} />}
           >
-            new counrse
+            New Course
           </Button>
         </Stack>
+
         {!isEmpty(courses) && isArray(courses) && <CoursesList courses={courses} />}
 
-        <ProductCartWidget />
+        {/* <ProductCartWidget /> */}
       </Container>
     </Page>
   );

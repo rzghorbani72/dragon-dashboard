@@ -25,6 +25,7 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 
 import { useSelector } from 'react-redux';
 import { Container, Grid, Stack, Typography } from '@mui/material';
+import { formatNumber } from 'src/utils/helpers';
 import Button from '@mui/material/Button';
 import request from 'src/utils/request';
 import api from 'src/config/api';
@@ -48,12 +49,9 @@ export default function SingleCourse({ info, setInfo, selectedImage }) {
   const categories = useSelector((state) => state.categories.data);
 
   const changeCategoryNameToId = (names) => {
-    debugger;
     if (!isEmpty(names) && !isEmpty(categories)) {
       if (isArray(names)) return names.map((name) => find(categories, { name }).id);
-      debugger;
       const nameArray = names.split(',');
-      debugger;
       return nameArray.map((name) => find(categories, { name }).id).join(',');
     }
     return names;
@@ -68,7 +66,15 @@ export default function SingleCourse({ info, setInfo, selectedImage }) {
     }
     return ids;
   };
-
+  const priceThousandSeparator = (name, value) => {
+    let newValue = value;
+    debugger;
+    if (['price', 'primary_price'].includes(name)) {
+      if (String(newValue).includes(',')) newValue = Number(newValue.replace(/,/g, ''));
+      newValue = formatNumber(String(newValue));
+    }
+    return newValue;
+  };
   const handleChange = (e) => {
     setInfo((info) => ({ ...info, [e.target.name]: e.target.value }));
   };
@@ -88,7 +94,6 @@ export default function SingleCourse({ info, setInfo, selectedImage }) {
       } else currentValues.push(selectedId);
     }
     value = uniq(currentValues).filter((item) => isNumber(item));
-    debugger;
     setInfo((info) => ({ ...info, category_ids: value }));
   };
 
@@ -180,7 +185,7 @@ export default function SingleCourse({ info, setInfo, selectedImage }) {
                 name={name}
                 label={name}
                 variant="outlined"
-                value={info[name]}
+                value={priceThousandSeparator(name, info[name])}
                 onChange={handleChange}
               />
             );

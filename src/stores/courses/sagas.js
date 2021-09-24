@@ -11,7 +11,7 @@ export function* fetchData({ payload }) {
   try {
     // yield put(openLoaderAction());
     const res = yield call(request, 'get', api.course.list());
-    debugger;
+
     if (res.status === 200) {
       yield put(fetchCourseDataSuccessful(res.data));
       //   yield put(closeLoaderAction());

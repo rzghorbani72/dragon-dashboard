@@ -15,7 +15,6 @@ import { openLoaderAction, closeLoaderAction } from 'src/stores/loader/reducer';
 import { errorParserMessage } from 'src/utils/helpers';
 
 export default function Images({ info, fetchCourse, selectedImage, setSelectedImage }) {
-  debugger;
   const [image, setImage] = useState(null);
   const [uploadedImage, setUploadImage] = useState(null);
   const dispatch = useDispatch();
@@ -23,15 +22,15 @@ export default function Images({ info, fetchCourse, selectedImage, setSelectedIm
   const uploadImage = async () => {
     if (image) {
       const bodyFormData = new FormData();
-      debugger;
+
       const cimage = new File([image], `courseImage_${new Date()}.jpeg`, {
         type: 'image/jpeg',
         lastModified: new Date(),
         size: 2
       });
-      debugger;
+
       bodyFormData.append('image', cimage);
-      debugger;
+
       bodyFormData.append('title', `${info.title}_image`);
       if (info?.id) bodyFormData.append('courseId', info?.id);
       dispatch(openLoaderAction());
