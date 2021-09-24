@@ -68,7 +68,6 @@ export default function SingleCourse({ info, setInfo, selectedImage }) {
   };
   const priceThousandSeparator = (name, value) => {
     let newValue = value;
-    debugger;
     if (['price', 'primary_price'].includes(name)) {
       if (String(newValue).includes(',')) newValue = Number(newValue.replace(/,/g, ''));
       newValue = formatNumber(String(newValue));

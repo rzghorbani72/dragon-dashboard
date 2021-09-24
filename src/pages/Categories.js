@@ -1,13 +1,12 @@
 /* eslint-disable camelcase */
 import { find } from 'lodash';
 import { Icon } from '@iconify/react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
-import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import { fetchCategoriesData } from 'src/stores/categories/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import plusFill from '@iconify/icons-eva/plus-fill';
-import { Link as RouterLink } from 'react-router-dom';
 import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
 // material
@@ -15,47 +14,38 @@ import {
   Card,
   Table,
   Stack,
-  Avatar,
-  Button,
-  Checkbox,
-  TableRow,
   TableBody,
-  TableCell,
   Container,
   Typography,
-  TableContainer,
-  TablePagination
+  TableContainer
 } from '@mui/material';
 // components
+import InputFields from 'src/components/_dashboard/categories/InputFields';
 import Page from '../components/Page';
-import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
-import {
-  CategoryListHead,
-  CategoryListToolbar,
-  CategoryMoreMenu
-} from '../components/_dashboard/categories';
+import SingleCategory from '../components/_dashboard/categories/SingleCategory';
+import { CategoryListHead, CategoryListToolbar } from '../components/_dashboard/categories';
 //
-import USERLIST from '../_mocks_/user';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'id', label: 'id', alignRight: false },
   { id: 'name', label: 'name', alignRight: false },
+  { id: 'type', label: 'type', alignRight: false },
   { id: 'parent', label: 'parent', alignRight: false },
+  { id: '' },
   { id: '' }
 ];
 
 // ----------------------------------------------------------------------
 
 export default function Categories() {
-  const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories.data);
   useEffect(() => {
@@ -79,16 +69,8 @@ export default function Categories() {
           <Typography variant="h4" gutterBottom>
             Categories
           </Typography>
-          <Button
-            variant="contained"
-            component={RouterLink}
-            to="#"
-            startIcon={<Icon icon={plusFill} />}
-          >
-            New Category
-          </Button>
         </Stack>
-
+        <SingleCategory />
         <Card>
           <CategoryListToolbar
             numSelected={selected.length}
@@ -103,77 +85,13 @@ export default function Categories() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={categories.lengtth}
+                  rowCount={categories.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                 />
                 <TableBody>
-                  {!isEmpty(categories) &&
-                    isArray(categories) &&
-                    categories.map((row) => {
-                      const { id, name, parent_id, createdAt } = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
-                      const parent = find(categories, { id: parent_id })
-                        ? find(categories, { id: parent_id }).name
-                        : 'is parent';
-                      return (
-                        <TableRow
-                          hover
-                          key={id}
-                          tabIndex={-1}
-                          role="checkbox"
-                          selected={isItemSelected}
-                          aria-checked={isItemSelected}
-                        >
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack
-                              direction="row"
-                              alignItems="center"
-                              justifyContent="center"
-                              spacing={4}
-                            >
-                              <Typography variant="subtitle2" noWrap>
-                                {id}
-                              </Typography>
-                            </Stack>
-                          </TableCell>
-
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack
-                              direction="row"
-                              alignItems="center"
-                              justifyContent="center"
-                              spacing={2}
-                            >
-                              <Typography variant="subtitle2" noWrap>
-                                {name}
-                              </Typography>
-                            </Stack>
-                          </TableCell>
-
-                          <TableCell justifyContent="center">
-                            <Stack
-                              direction="row"
-                              alignItems="center"
-                              justifyContent="center"
-                              spacing={2}
-                            >
-                              <Typography variant="subtitle2" noWrap>
-                                {parent}
-                              </Typography>
-                            </Stack>
-                          </TableCell>
-
-                          <TableCell align="left" justifyContent="center">
-                            {createdAt}
-                          </TableCell>
-
-                          <TableCell align="right">
-                            <CategoryMoreMenu />
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                  {isArray(categories) &&
+                    categories.map((row) => <InputFields row={row} categories={categories} />)}
                 </TableBody>
               </Table>
             </TableContainer>

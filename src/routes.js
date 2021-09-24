@@ -27,7 +27,7 @@ export default function Router() {
         { path: 'users/:id', element: <User /> },
         { path: 'courses', element: <Courses /> },
         { path: 'courses/:id', element: <Course /> },
-        { path: 'Categories', element: <Categories /> },
+        { path: 'categories', element: <Categories /> },
         { path: 'Orders', element: <Orders /> }
       ]
     },
