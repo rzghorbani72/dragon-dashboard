@@ -13,6 +13,7 @@ import request from 'src/utils/request';
 import { openSnackBar } from 'src/stores/snackbar/reducer';
 import { openLoaderAction, closeLoaderAction } from 'src/stores/loader/reducer';
 import { errorParserMessage } from 'src/utils/helpers';
+import requestHandler from 'src/utils/requestHandler';
 
 export default function Images({ info, fetchCourse, selectedImage, setSelectedImage }) {
   const [image, setImage] = useState(null);
@@ -33,6 +34,7 @@ export default function Images({ info, fetchCourse, selectedImage, setSelectedIm
 
       bodyFormData.append('title', `${info.title}_image`);
       if (info?.id) bodyFormData.append('courseId', info?.id);
+
       dispatch(openLoaderAction());
       const uploadedImage = await request('post', api.image.upload(), bodyFormData, {
         'Content-Type': 'multipart/form-data'
@@ -54,20 +56,12 @@ export default function Images({ info, fetchCourse, selectedImage, setSelectedIm
   };
   const resetImageCropper = () => setImage(null);
   const permanentlyDeleteImage = async (item) => {
-    const deleteRes = await request('delete', api.image.deleteOne(item.uid));
-    if (deleteRes.status === 200) {
-      fetchCourse();
-      dispatch(openSnackBar('deleted', 'success'));
-    } else {
-      dispatch(
-        openSnackBar(
-          deleteRes.response.data.message
-            ? deleteRes.response.data.message
-            : deleteRes.response.data.name,
-          'error'
-        )
-      );
-    }
+    await requestHandler({
+      method: 'delete',
+      dispatch,
+      apiCall: api.image.deleteOne(item.uid),
+      fn: () => fetchCourse()
+    });
   };
   return (
     <>

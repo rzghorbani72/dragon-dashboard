@@ -42,7 +42,6 @@ const TABLE_HEAD = [
 
 export default function Categories() {
   const [order, setOrder] = useState('asc');
-  const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
 
@@ -63,7 +62,7 @@ export default function Categories() {
   };
 
   return (
-    <Page title="Category | Minimal-UI">
+    <Page title="Category">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
@@ -72,11 +71,7 @@ export default function Categories() {
         </Stack>
         <SingleCategory />
         <Card>
-          <CategoryListToolbar
-            numSelected={selected.length}
-            filterName={filterName}
-            onFilterName={handleFilterByName}
-          />
+          <CategoryListToolbar filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -86,7 +81,6 @@ export default function Categories() {
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
                   rowCount={categories.length}
-                  numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                 />
                 <TableBody>

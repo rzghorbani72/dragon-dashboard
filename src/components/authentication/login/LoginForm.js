@@ -21,6 +21,7 @@ import api from 'src/config/api';
 import request from 'src/utils/request';
 import { useDispatch } from 'react-redux';
 import { fetchProfileData } from 'src/stores/profile/actions';
+import requestHandler from 'src/utils/requestHandler';
 // ----------------------------------------------------------------------
 const phoneRegex = /^[\+]?[(]?[0-9]{2}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
 
@@ -44,14 +45,17 @@ export default function LoginForm() {
     },
     validationSchema: LoginSchema,
     onSubmit: async ({ phoneNumber, password }) => {
-      const loginResult = await request('post', api.auth.login(), {
-        phone_number: phoneNumber,
-        password
+      await requestHandler({
+        method: 'post',
+        apiCall: api.auth.login(),
+        dispatch,
+        body: {
+          phone_number: phoneNumber,
+          password
+        },
+        successAction: fetchProfileData,
+        fn: () => navigate('/dashboard', { replace: true })
       });
-      if (loginResult.status_name === 'success') {
-        dispatch(fetchProfileData());
-        navigate('/dashboard', { replace: true });
-      }
     }
   });
 

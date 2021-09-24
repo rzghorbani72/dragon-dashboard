@@ -1,3 +1,5 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable eqeqeq */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-debugger */
@@ -9,7 +11,7 @@ import {
   IMAGE_SIZE,
   IMG_SIZE_MSG
 } from 'src/config/constants';
-import { isArray } from 'lodash';
+import { isArray, isObject } from 'lodash';
 
 const JalaliMoment = require('moment-jalaali');
 
@@ -29,9 +31,41 @@ export const fixNumbers = (str) => {
   }
   return str;
 };
+function getObject(theObject, target) {
+  let result = null;
+  if (theObject instanceof Array) {
+    for (let i = 0; i < theObject.length; i++) {
+      result = getObject(theObject[i], target);
+      if (result) {
+        break;
+      }
+    }
+  } else if (theObject instanceof Object) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const prop in theObject) {
+      console.log(`${prop}: ${theObject[prop]}`);
+      if (prop === target) {
+        if (theObject[prop]) {
+          return theObject[prop];
+        }
+      }
+      if (theObject[prop] instanceof Object || theObject[prop] instanceof Array) {
+        result = getObject(theObject[prop], target);
+        if (result) {
+          break;
+        }
+      }
+    }
+  }
+  return result;
+}
 export const errorParserMessage = (res) => {
-  const msg =
-    res.response?.data?.message?.message || res.response?.data?.message || res.response.data.name;
+  // const msg =
+  //   res.response?.data?.message?.message ||
+  //   res.response?.data?.message ||
+  //   res.response?.data?.name ||
+  //   res.response.data.details.body[0].message;
+  const msg = getObject(res.response.data.details, 'message');
   return msg;
 };
 export function isInt(n) {

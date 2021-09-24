@@ -71,7 +71,7 @@ export default function CoursesPage() {
           <Button
             variant="contained"
             component={RouterLink}
-            to="#"
+            to="/dashboard/courses/new"
             startIcon={<Icon icon={plusFill} />}
           >
             New Course

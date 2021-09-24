@@ -1,11 +1,8 @@
-import { useFormik } from 'formik';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { isEmpty, isArray, find } from 'lodash';
+import { isArray, find } from 'lodash';
 // material
 import { Container, Grid, Stack, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
-import request from 'src/utils/request';
 import api from 'src/config/api';
 // components
 import { styled } from '@mui/styles';
@@ -16,9 +13,7 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategoriesData } from 'src/stores/categories/actions';
-import { openSnackBar } from 'src/stores/snackbar/reducer';
-import { openLoaderAction, closeLoaderAction } from 'src/stores/loader/reducer';
-import { errorParserMessage } from 'src/utils/helpers';
+import requestHandler from 'src/utils/requestHandler';
 
 export default function SingleCourse() {
   const [info, setInfo] = useState({ name: '', type: 'category', parent_id: 0 });
@@ -30,17 +25,14 @@ export default function SingleCourse() {
   }, []);
 
   const submitHandler = async () => {
-    dispatch(openLoaderAction());
     const data = { name: info.name, type: info.type, parent_id: info.parent_id };
-    const creatResponse = await request('post', api.category.create(), data);
-    dispatch(closeLoaderAction());
-    if (creatResponse.status_name !== 'error') {
-      dispatch(fetchCategoriesData());
-      dispatch(openSnackBar(`category created successfully`, 'success'));
-    } else {
-      const message = errorParserMessage(creatResponse);
-      dispatch(openSnackBar(JSON.stringify(message), 'error'));
-    }
+    await requestHandler({
+      method: 'post',
+      apiCall: api.category.create(),
+      body: { ...data },
+      dispatch,
+      successAction: fetchCategoriesData
+    });
   };
 
   const findCategoryNameById = (id) => {

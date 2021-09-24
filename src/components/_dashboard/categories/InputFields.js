@@ -1,11 +1,9 @@
 /* eslint-disable camelcase */
 import { find } from 'lodash';
-import { Icon } from '@iconify/react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { fetchCategoriesData } from 'src/stores/categories/actions';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 // material
 import { Stack, Button, TableRow, TableCell, Typography } from '@mui/material';
@@ -14,14 +12,10 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
-import request from 'src/utils/request';
+import requestHandler from 'src/utils/requestHandler';
 
 // components
 
-import { openSnackBar } from 'src/stores/snackbar/reducer';
-import { openLoaderAction, closeLoaderAction } from 'src/stores/loader/reducer';
-import { errorParserMessage } from 'src/utils/helpers';
-import { CategoryMoreMenu } from 'src/components/_dashboard/categories';
 import api from 'src/config/api';
 //
 
@@ -51,23 +45,27 @@ export default function InputFields({ row, categories }) {
 
   const update = async () => {
     const { name, parent_id, type } = info;
-    dispatch(openLoaderAction());
-    const creatResponse = await request('put', api.category.update(info.id), {
-      name,
-      parent_id,
-      type
+    await requestHandler({
+      method: 'put',
+      apiCall: api.category.update(info.id),
+      body: {
+        name,
+        parent_id,
+        type
+      },
+      dispatch,
+      successAction: fetchCategoriesData
     });
-    dispatch(closeLoaderAction());
-
-    if (creatResponse.status_name !== 'error') {
-      dispatch(fetchCategoriesData());
-      dispatch(openSnackBar(`category updated successfully`, 'success'));
-    } else {
-      const message = errorParserMessage(creatResponse);
-      dispatch(openSnackBar(JSON.stringify(message), 'error'));
-    }
   };
 
+  const deleteCategory = async () => {
+    await requestHandler({
+      method: 'delete',
+      apiCall: api.category.delete(info.id),
+      dispatch,
+      successAction: fetchCategoriesData
+    });
+  };
   return (
     <TableRow hover tabIndex={-1} role="checkbox">
       <TableCell component="th" scope="row" padding="none">
@@ -115,21 +113,29 @@ export default function InputFields({ row, categories }) {
               label="parent"
               onChange={handleChange}
             >
-              {[...categories, { id: 0, name: 'is parent' }].map((cat) => (
-                <MenuItem value={cat.name}>{cat.name}</MenuItem>
-              ))}
+              {[...categories, { id: 0, name: 'is parent' }]
+                .filter((item) => item.id !== info.id)
+                .map((cat) => (
+                  <MenuItem value={cat.name}>{cat.name}</MenuItem>
+                ))}
             </Select>
           </FormControl>
         </Stack>
       </TableCell>
       <TableCell align="left" justifyContent="center">
-        <Button variant="outlined" onClick={update} style={{ height: 50 }}>
+        <Button variant="outlined" onClick={update} style={{ height: 50, width: '100%' }}>
           Update
         </Button>
       </TableCell>
-
-      <TableCell align="right">
-        <CategoryMoreMenu />
+      <TableCell align="left" justifyContent="center">
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={deleteCategory}
+          style={{ height: 50, width: '100%' }}
+        >
+          Delete
+        </Button>
       </TableCell>
     </TableRow>
   );

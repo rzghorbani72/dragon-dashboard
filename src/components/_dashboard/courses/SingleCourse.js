@@ -15,6 +15,7 @@ import { fetchCategoriesData } from 'src/stores/categories/actions';
 import { openSnackBar } from 'src/stores/snackbar/reducer';
 import { openLoaderAction, closeLoaderAction } from 'src/stores/loader/reducer';
 import { errorParserMessage } from 'src/utils/helpers';
+import requestHandler from 'src/utils/requestHandler';
 // ----------------------------------------------------------------------
 
 export default function SingleCourse() {
@@ -90,22 +91,23 @@ export default function SingleCourse() {
     const method = data?.id ? 'put' : 'post';
     const apiCall = data?.id ? api.course.update(data.id) : api.course.create();
     const mode = data?.id ? 'update' : 'create';
+    data.price = Number(data.price.split(',').join(''));
+    data.primary_price = Number(data.primary_price.split(',').join(''));
+
     if (isArray(data.category_ids)) data.category_ids = data.category_ids.join(',');
     if (data.id) {
       delete data.id;
       delete data.files;
     }
     if (selectedImage) data.imageId = selectedImage;
-    const creatResponse = await request(method, apiCall, data);
-    dispatch(closeLoaderAction());
 
-    if (creatResponse.status_name !== 'error') {
-      if (mode === 'update') fetchCourse();
-      dispatch(openSnackBar(`course ${mode}d successfully`, 'success'));
-    } else {
-      const message = errorParserMessage(creatResponse);
-      dispatch(openSnackBar(JSON.stringify(message), 'error'));
-    }
+    await requestHandler({
+      method,
+      apiCall,
+      dispatch,
+      body: { ...data },
+      fn: () => mode === 'update' && fetchCourse()
+    });
   };
   return (
     <Container>
